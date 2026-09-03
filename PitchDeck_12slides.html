@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NeuroGaze — Pitch Deck</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#07111D;--s1:#0C1927;--s2:#0F1E2E;
+  --iris:#7C5CBF;--il:rgba(124,92,191,.15);--ih:rgba(124,92,191,.45);
+  --teal:#00C9AD;--tl:rgba(0,201,173,.12);
+  --text:#EDF0F7;--muted:#5A7080;--dim:#8BA0B4;
+  --red:#E94560;--gold:#F59E0B;--grn:#22C55E;
+  --bdr:rgba(255,255,255,.07);
+  --fh:'Space Grotesk',sans-serif;--fb:'Inter',sans-serif;
+}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--fb);overflow:hidden;user-select:none}
+
+/* SLIDE ENGINE */
+.deck{position:relative;width:100vw;height:100vh}
+.slide{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;padding:64px 80px;opacity:0;transition:opacity .35s ease}
+.slide.active{display:flex;opacity:1}
+.slide.left{transform:translateX(-40px)}.slide.right{transform:translateX(40px)}
+.slide.active{transform:translateX(0)}
+
+/* SLIDE BG VARIANTS */
+.slide-dark{background:var(--bg)}
+.slide-surf{background:var(--s1);border:1px solid var(--bdr)}
+.slide-iris{background:linear-gradient(135deg,#1a0e3d 0%,#0C1927 60%)}
+.slide-teal{background:linear-gradient(135deg,#003d36 0%,#0C1927 60%)}
+.slide-red{background:linear-gradient(135deg,#3d0a14 0%,#0C1927 60%)}
+
+/* GRID BG */
+.grid-bg{position:absolute;inset:0;background-image:linear-gradient(rgba(124,92,191,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(124,92,191,.04) 1px,transparent 1px);background-size:52px 52px;pointer-events:none}
+
+/* TYPE */
+.eyebrow{font-family:var(--fh);font-size:12px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--teal);margin-bottom:16px}
+.display{font-family:var(--fh);font-size:clamp(48px,7vw,88px);font-weight:700;letter-spacing:-.03em;line-height:1.0;margin-bottom:24px}
+.display .hi{color:var(--iris)}.display .ht{color:var(--teal)}.display .hr{color:var(--red)}
+.h1{font-family:var(--fh);font-size:clamp(36px,5vw,60px);font-weight:700;letter-spacing:-.025em;line-height:1.1;margin-bottom:20px}
+.h2{font-family:var(--fh);font-size:clamp(24px,3vw,38px);font-weight:700;letter-spacing:-.02em;line-height:1.2;margin-bottom:16px}
+.body{font-size:clamp(15px,1.8vw,19px);color:var(--dim);line-height:1.75;max-width:700px}
+.body-lg{font-size:clamp(17px,2vw,22px);color:var(--dim);line-height:1.7;max-width:760px}
+
+/* CARDS */
+.cards{display:grid;gap:16px;width:100%;max-width:1100px;margin-top:40px}
+.cards-3{grid-template-columns:repeat(3,1fr)}
+.cards-4{grid-template-columns:repeat(4,1fr)}
+.cards-2{grid-template-columns:repeat(2,1fr)}
+.card{background:rgba(255,255,255,.04);border:1px solid var(--bdr);border-radius:16px;padding:28px 24px}
+.card-iris{background:var(--il);border-color:var(--ih)}
+.card-teal{background:var(--tl);border-color:rgba(0,201,173,.35)}
+.card-num{font-family:var(--fh);font-size:clamp(32px,4vw,52px);font-weight:700;margin-bottom:8px}
+.card-num.iris{color:var(--iris)}.card-num.teal{color:var(--teal)}.card-num.red{color:var(--red)}.card-num.gold{color:var(--gold)}
+.card-lbl{font-size:14px;color:var(--muted);line-height:1.5}
+.card-title{font-family:var(--fh);font-size:17px;font-weight:600;margin-bottom:8px}
+.card-body{font-size:13px;color:var(--dim);line-height:1.6}
+
+/* TABLE */
+.tbl{width:100%;max-width:1000px;margin-top:36px;border-collapse:collapse;font-size:15px}
+.tbl th{font-family:var(--fh);font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:12px 18px;text-align:left;border-bottom:1px solid var(--bdr)}
+.tbl td{padding:14px 18px;border-bottom:1px solid var(--bdr);color:var(--dim)}
+.tbl td:first-child{color:var(--text);font-weight:500}
+.tbl tr.hl td{color:var(--text)}.tbl tr.hl{background:rgba(124,92,191,.1)}
+.tbl tr.hl td:first-child{color:var(--teal);font-weight:700}
+
+/* BADGES */
+.badge{display:inline-block;padding:4px 12px;border-radius:20px;font-family:var(--fh);font-size:11px;font-weight:600;letter-spacing:.06em}
+.bg{background:rgba(34,197,94,.15);color:var(--grn)}
+.bi{background:var(--il);color:var(--iris)}
+.bt{background:var(--tl);color:var(--teal)}
+.br{background:rgba(233,69,96,.15);color:var(--red)}
+
+/* TIMELINE */
+.timeline{display:flex;gap:0;width:100%;max-width:1100px;margin-top:36px;position:relative}
+.timeline::before{content:'';position:absolute;top:22px;left:44px;right:44px;height:2px;background:linear-gradient(90deg,var(--iris),var(--teal));opacity:.3}
+.tl-item{flex:1;padding-top:52px;position:relative}
+.tl-dot{position:absolute;top:14px;left:0;width:18px;height:18px;border-radius:50%;border:2px solid var(--iris);background:var(--bg)}
+.tl-dot.done{background:var(--iris);box-shadow:0 0 12px var(--ih)}
+.tl-phase{font-family:var(--fh);font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);margin-bottom:4px}
+.tl-time{font-family:var(--fh);font-size:12px;font-weight:500;color:var(--muted);margin-bottom:8px}
+.tl-title{font-family:var(--fh);font-size:15px;font-weight:600;margin-bottom:6px}
+.tl-items{font-size:12px;color:var(--dim);line-height:1.8}
+
+/* NAV */
+#nav-bar{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:12px;background:rgba(12,25,39,.9);backdrop-filter:blur(16px);border:1px solid var(--bdr);border-radius:40px;padding:10px 20px;z-index:100}
+.nav-dot{width:8px;height:8px;border-radius:50%;background:var(--bdr);cursor:pointer;transition:all .2s}
+.nav-dot.active{background:var(--teal);width:24px;border-radius:4px}
+.nav-btn{background:transparent;border:none;color:var(--muted);cursor:pointer;font-size:18px;padding:0 4px;transition:color .2s}
+.nav-btn:hover{color:var(--text)}
+#slide-counter{font-family:var(--fh);font-size:11px;color:var(--muted);min-width:32px;text-align:center}
+
+/* LOGO */
+.logo-mark{width:56px;height:56px;border-radius:14px;background:var(--iris);display:flex;align-items:center;justify-content:center;font-size:28px;margin-bottom:20px;box-shadow:0 0 32px var(--il)}
+.slide-logo{position:absolute;top:28px;left:40px;display:flex;align-items:center;gap:10px;font-family:var(--fh);font-size:15px;font-weight:700;color:var(--text)}
+.slide-logo .dot{width:20px;height:20px;border-radius:50%;background:var(--iris)}
+
+/* DIVIDER */
+.div-line{width:48px;height:3px;background:linear-gradient(90deg,var(--iris),var(--teal));border-radius:2px;margin-bottom:24px}
+
+/* QUOTE */
+.quote{font-family:var(--fh);font-size:clamp(20px,3vw,30px);font-weight:500;font-style:italic;color:var(--text);line-height:1.5;max-width:800px;text-align:center;margin-bottom:20px}
+.quote-attr{font-size:14px;color:var(--muted)}
+
+/* BIG STAT */
+.big-stat{display:flex;flex-direction:column;align-items:center;gap:8px}
+.big-stat-num{font-family:var(--fh);font-size:clamp(72px,12vw,140px);font-weight:700;line-height:1;letter-spacing:-.04em}
+.big-stat-lbl{font-size:clamp(16px,2vw,22px);color:var(--muted);font-family:var(--fh)}
+
+/* KEYFRAMES */
+@keyframes fade-in{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.slide.active>*{animation:fade-in .5s ease forwards}
+.slide.active>*:nth-child(1){animation-delay:.05s}
+.slide.active>*:nth-child(2){animation-delay:.12s}
+.slide.active>*:nth-child(3){animation-delay:.19s}
+.slide.active>*:nth-child(4){animation-delay:.26s}
+.slide.active>*:nth-child(5){animation-delay:.33s}
+
+@media(max-width:700px){
+  .slide{padding:40px 24px}
+  .cards-3,.cards-4{grid-template-columns:1fr 1fr}
+  .cards-2{grid-template-columns:1fr}
+  .timeline{flex-direction:column}.timeline::before{display:none}
+}
+</style>
+</head>
+<body>
+<div class="deck" id="deck">
+
+<!-- SLIDE 1: COVER -->
+<div class="slide slide-iris" data-slide="1">
+  <div class="grid-bg"></div>
+  <div class="slide-logo"><div class="dot"></div>NeuroGaze</div>
+  <div class="logo-mark">&#128065;</div>
+  <div class="eyebrow">Seed Round &mdash; 2025</div>
+  <div class="display">Eye control<br>for <span class="hi">everyone</span>.<br><span class="ht">$149.</span></div>
+  <div class="body-lg">Professional-grade eye tracking for ALS, quadriplegia, and locked-in syndrome.<br>Open source. No subscription. Permanent.</div>
+</div>
+
+<!-- SLIDE 2: THE PROBLEM -->
+<div class="slide slide-red" data-slide="2">
+  <div class="grid-bg"></div>
+  <div class="slide-logo"><div class="dot"></div>NeuroGaze</div>
+  <div class="eyebrow">The Problem</div>
+  <div class="h1">Communication is a right,<br>not a luxury.</div>
+  <div class="div-line"></div>
+  <div class="cards cards-3">
+    <div class="card"><div class="card-num red">5.4M</div><div class="card-lbl">Americans with paralysis. Most cannot speak, type, or control technology independently.</div></div>
+    <div class="card"><div class="card-num gold">$15,000</div><div class="card-lbl">Average cost of a clinical eye tracking device. Insurance covers fewer than 30% of eligible patients.</div></div>
+    <div class="card"><div class="card-num red">&lt;1%</div><div class="card-lbl">Of paralyzed people in developing countries have access to any eye tracking technology.</div></div>
+  </div>
+  <div style="margin-top:28px" class="body">The technology to solve this has existed for 20 years. The barrier is price, not science.</div>
+</div>
+
+<!-- SLIDE 3: THE INSIGHT -->
+<div class="slide slide-dark" data-slide="3">
+  <div class="grid-bg"></div>
+  <div class="slide-logo"><div class="dot"></div>NeuroGaze</div>
+  <div class="eyebrow">The Key Insight</div>
+  <div class="h1" style="text-align:center">Tobii's hardware costs<br><span style="color:var(--iris)">$40</span> to build.</div>
+  <div class="body" style="text-align:center;margin:20px auto">They charge $15,000 for the software, brand reputation, and enterprise pricing strategy. The fundamental technology — IR camera + LED ring + corneal reflection math — is not patented for simple implementations and has been in academic literature since 1990.</div>
+  <div class="cards cards-2" style="max-width:800px;margin-top:28px">
+    <div class="card card-iris">
+      <div class="card-title">What Tobii charges for</div>
+      <div class="card-body">R&amp;D amortization · Patents · Brand · Enterprise sales team · Insurance navigation · Support contracts · SDK licensing</div>
+    </div>
+    <div class="card card-teal">
+      <div class="card-title">What we replace it with</div>
+      <div class="card-body">Open source · Community support · Direct sales · Free SDK · No patents · $53 BOM · Sell at $149</div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 4: THE SOLUTION -->
+<div class="slide slide-teal" data-slide="4">
+  <div class="grid-bg"></div>
+  <div class="slide-logo"><div class="dot"></div>NeuroGaze</div>
+  <div class="eyebrow">The Solution</div>
+  <div class="h1">NeuroGaze — Open Source<br>IR Eye Tracker at $149</div>
+  <div class="div-line"></div>
+  <div class="cards cards-4" style="margin-top:32px">
+    <div class="card"><div style="font-size:28px;margin-bottom:12px">&#128065;</div><div class="card-title">IR Camera</div><div class="card-body">Raspberry Pi NoIR camera. No IR filter. Sees the corneal reflection from our LED ring.</div></div>
+    <div class="card"><div style="font-size:28px;margin-bottom:12px">&#128161;</div><div class="card-title">850nm LED Ring</div><div class="card-body">8 near-infrared LEDs around the lens. Illuminates the eye, creates the precise corneal reflection reference point.</div></div>
+    <div class="card"><div style="font-size:28px;margin-bottom:12px">&#129504;</div><div class="card-title">P-CR Tracking</div><div class="card-body">Pupil-Corneal Reflection vector. Head-movement independent. Same math as every $15,000 device.</div></div>
+    <div class="card"><div style="font-size:28px;margin-bottom:12px">&#128187;</div><div class="card-title">NeuroSketch App</div><div class="card-body">Free, offline, browser-based AAC. Communication board, drawing, keyboard, rehab, emergency SOS.</div></div>
+  </div>
+</div>
+
+<!-- SLIDE 5: ACCURACY -->
+<div class="slide slide-dark" data-slide="5">
+  <div class="grid-bg"></div>
+  <div class="slide-logo"><div class="dot"></div>NeuroGaze</div>
+  <div class="eyebrow">Accuracy Comparison</div>
+  <div class="h1">We match Tobii Eye Tracker 5.<br>At 1/10th the cost.</div>
+  <table class="tbl">
+    <thead><tr><th>Solution</th><th>Accuracy</th><th>Price</th><th>Open Source</th><th>Offline</th></tr></thead>
+    <tbody>
+      <tr><td>Webcam only</td><td>~150px</td><td>$0</td><td>&#10003;</td><td>&#10003;</td></tr>
+      <tr><td>WebGazer.js</td><td>~100px</td><td>$0</td><td>&#10003;</td><td>&#10003;</td></tr>
+      <tr><td>NeuroGaze ML Model</td><td>~40px</td><td>$0</td><td>&#10003;</td><td>&#10003;</td></tr>
+      <tr class="hl"><td>&#9733; NeuroGaze IR Hardware</td><td>~15–20px</td><td>$149</td><td>&#10003;</td><td>&#10003;</td></tr>
+      <tr><td>Tobii Eye Tracker 5</td><td>~8–15px</td><td>$179</td><td>&#10007;</td><td>&#10003;</td></tr>
+      <tr><td>Tobii PCEye Go</td><td>~5–10px</td><td>$2,995</td><td>&#10007;</td><td>&#10003;</td></tr>
+      <tr><td>Eyegaze Edge</td><td>~3–8px</td><td>$14,000</td><td>&#10007;</td><td>&#10003;</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- SLIDE 6: MARKET -->
+<div class="slide slide-dark" data-slide="6">
+  <div class="grid-bg"></div>
+  <div class="slide-logo"><div class="dot"></div>NeuroGaze</div>
+  <div class="eyebrow">Market Opportunity</div>
+  <div class="h1">$854M market. Growing 12%/year.<br>We make it 10&times; bigger.</div>
+  <div class="cards cards-3" style="margin-top:32px">
+    <div class="card card-iris">
+      <div class="card-num iris">$300M+</div>
+      <div class="card-title">AAC / Medical</div>
+      <div class="card-body">5.4M paralyzed Americans. 350K ALS worldwide. 17M globally. At $149 we reach 10&times; more than current market.</div>
+    </div>
+    <div class="card">
+      <div class="card-num teal">$200M+</div>
+      <div class="card-title">Research Labs</div>
+      <div class="card-body">4,000+ university labs worldwide. Currently spend $2K–25K/setup. We replace them at $149 + $99/mo software.</div>
+    </div>
+    <div class="card">
+      <div class="card-num gold">$150M+</div>
+      <div class="card-title">VR/AR Dev</div>
+      <div class="card-body">Meta, Apple, Valve need eye tracking in headsets. Developer kit market 500K units/year. Cheapest way to prototype.</div>
+    </div>
+  </div>
+  <div class="body" style="margin-top:24px">Tobii revenue: ~$70M/year at premium pricing. At $149, the same accuracy captures 5–10&times; the volume.</div>
+</div>
+
+<!-- SLIDE 7: BUSINESS MODEL -->
+<div class="slide slide-iris" data-slide="7">
+  <div class="grid-bg"></div>
+  <div class="slide-logo"><div class="dot"></div>NeuroGaze</div>
+  <div class="eyebrow">Business Model</div>
+  <div class="h1">Hardware margin + software subscriptions<br>+ enterprise contracts.</div>
+  <div class="cards cards-3" style="margin-top:32px">
+    <div class="card">
+      <div class="card-title">&#129497; Hardware Sales</div>
+      <div class="card-body" style="margin-bottom:16px">$53 BOM. Sell at $149. $96 margin per unit.<br>Year 1: 500 units = $74,500<br>Year 3: 15,000 units = $2.2M<br>Year 5: 80,000 units = $11.9M</div>
+      <span class="badge bi">Primary revenue</span>
+    </div>
+    <div class="card">
+      <div class="card-title">&#128202; Research Subscription</div>
+      <div class="card-body" style="margin-bottom:16px">$99/month per lab. Includes: raw gaze data API, analytics dashboard, participant management, priority support.<br>Year 3: 600 labs = $720K/yr</div>
+      <span class="badge bt">Recurring revenue</span>
+    </div>
+    <div class="card">
+      <div class="card-title">&#127973; Hospital Enterprise</div>
+      <div class="card-body" style="margin-bottom:16px">$5K–50K/year per institution. Includes: unlimited devices, clinical dashboard, SLP training, insurance support.<br>Year 4: 50 hospitals = $1.5M/yr</div>
+      <span class="badge bg">High value</span>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 8: ROADMAP -->
+<div class="slide slide-dark" data-slide="8">
+  <div class="grid-bg"></div>
+  <div class="slide-logo"><div class="dot"></div>NeuroGaze</div>
+  <div class="eyebrow">Roadmap</div>
+  <div class="h1">From open source to<br>medical device in 12 months.</div>
+  <div class="timeline">
+    <div class="tl-item"><div class="tl-dot done"></div><div class="tl-phase">Phase 1</div><div class="tl-time">Now &mdash; Live</div><div class="tl-title">Software</div><div class="tl-items">&#10003; NeuroSketch app<br>&#10003; Eye Joystick mode<br>&#10003; Scanning mode<br>&#10003; 4 control modes</div></div>
+    <div class="tl-item"><div class="tl-dot"></div><div class="tl-phase">Phase 2</div><div class="tl-time">Month 1–2</div><div class="tl-title">ML Model</div><div class="tl-items">&#9675; Train on GazeCapture<br>&#9675; Deploy via TF.js<br>&#9675; 40px accuracy<br>&#9675; Open weights</div></div>
+    <div class="tl-item"><div class="tl-dot"></div><div class="tl-phase">Phase 3</div><div class="tl-time">Month 2–5</div><div class="tl-title">IR Hardware</div><div class="tl-items">&#9675; PCB design complete<br>&#9675; 20 prototypes built<br>&#9675; Clinical validation<br>&#9675; Kickstarter launch</div></div>
+    <div class="tl-item"><div class="tl-dot"></div><div class="tl-phase">Phase 4</div><div class="tl-time">Month 6–12</div><div class="tl-title">Scale</div><div class="tl-items">&#9675; NIH SBIR grant<br>&#9675; FDA 510(k) filed<br>&#9675; Hospital contracts<br>&#9675; Insurance coverage</div></div>
+  </div>
+</div>
+
+<!-- SLIDE 9: TRACTION -->
+<div class="slide slide-dark" data-slide="9">
+  <div class="grid-bg"></div>
+  <div class="slide-logo"><div class="dot"></div>NeuroGaze</div>
+  <div class="eyebrow">Traction</div>
+  <div class="h1">What exists today.</div>
+  <div class="cards cards-4" style="margin-top:36px">
+    <div class="card card-iris"><div class="card-num iris">5</div><div class="card-lbl">Control modes built and working (Head, Eye Joystick, WebGazer, Scanning, IR)</div></div>
+    <div class="card"><div class="card-num teal">18</div><div class="card-lbl">Files of production code — app, server, ML training, hardware guide, business docs</div></div>
+    <div class="card"><div class="card-num gold">0</div><div class="card-lbl">Cost to a paralyzed user to start using NeuroSketch today — download, open, go</div></div>
+    <div class="card"><div class="card-num" style="color:var(--grn)">$37</div><div class="card-lbl">Hardware build cost for Option B (modified USB webcam + IR ring, no Pi needed)</div></div>
+  </div>
+  <div class="body" style="margin-top:28px">NeuroSketch_v5.html is live today. Open it, allow camera, pick a mode, and it works. The hardware gap is $37 in components and 2 hours of assembly.</div>
+</div>
+
+<!-- SLIDE 10: TEAM -->
+<div class="slide slide-dark" data-slide="10">
+  <div class="grid-bg"></div>
+  <div class="slide-logo"><div class="dot"></div>NeuroGaze</div>
+  <div class="eyebrow">Team</div>
+  <div class="h1">Built by someone who believes<br>every life deserves a voice.</div>
+  <div class="cards cards-2" style="max-width:900px;margin-top:36px">
+    <div class="card card-iris">
+      <div class="card-title" style="font-size:20px;margin-bottom:4px">Ansh — Founder &amp; Engineer</div>
+      <div class="card-body" style="margin-bottom:16px">Final-year CS student, NUCES. Full-stack developer (React, Node, Python, ML). Built NeuroSketch from concept to production in one sprint. Competes in hackathons and programming contests. Motivated by cause, not capital.</div>
+      <span class="badge bi">Software &amp; Vision</span>
+    </div>
+    <div class="card">
+      <div class="card-title" style="font-size:18px;margin-bottom:4px">Advisors Needed</div>
+      <div class="card-body" style="margin-bottom:16px">
+        <b style="color:var(--text)">Clinical (SLP or neurologist)</b><br>User testing, FDA pathway<br><br>
+        <b style="color:var(--text)">Hardware engineer</b><br>PCB design, manufacturing scale<br><br>
+        <b style="color:var(--text)">Business development</b><br>Hospital partnerships, grants
+      </div>
+      <span class="badge bt">Recruiting now</span>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 11: THE ASK -->
+<div class="slide slide-iris" data-slide="11">
+  <div class="grid-bg"></div>
+  <div class="slide-logo"><div class="dot"></div>NeuroGaze</div>
+  <div class="eyebrow">The Ask</div>
+  <div class="h1">$75,000 to prove it.<br>$2M to scale it.</div>
+  <div class="div-line"></div>
+  <div class="cards cards-2" style="max-width:900px;margin-top:32px">
+    <div class="card">
+      <div class="card-title">Seed round: $75,000</div>
+      <div class="card-body" style="margin-bottom:16px">
+        $26,500 — Hardware (500 prototype units)<br>
+        $15,000 — FDA 510(k) pre-submission<br>
+        $12,000 — Clinical user trials (n=15)<br>
+        $10,000 — Operations (6 months)<br>
+        $11,500 — Buffer
+      </div>
+      <span class="badge bi">Kickstarter target</span>
+    </div>
+    <div class="card">
+      <div class="card-title">Use of funds</div>
+      <div class="card-body" style="margin-bottom:16px">
+        Deliver 500 Kickstarter units<br>
+        Publish clinical validation study<br>
+        File NIH SBIR Phase I ($300K grant, no equity)<br>
+        Begin FDA 510(k) process<br>
+        Hire hardware engineer (part-time)
+      </div>
+      <span class="badge bg">18-month runway</span>
+    </div>
+  </div>
+  <div class="body" style="margin-top:24px">Alternative: Apply for NIH SBIR Phase I (up to $300,000, no equity). Application deadline: April 5 / August 5 / December 5.</div>
+</div>
+
+<!-- SLIDE 12: CLOSE -->
+<div class="slide slide-teal" data-slide="12">
+  <div class="grid-bg"></div>
+  <div class="logo-mark">&#128065;</div>
+  <div class="quote">"Five years from now, a paralyzed child in Lagos opens their laptop, downloads NeuroSketch, clips on a $149 device bought from a local shop, and types their first message to their mother."</div>
+  <div class="quote-attr">That is the product. That is the company. That is why we build.</div>
+  <div style="display:flex;gap:16px;margin-top:40px;flex-wrap:wrap;justify-content:center">
+    <div style="background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.15);border-radius:10px;padding:14px 24px;text-align:center">
+      <div style="font-family:var(--fh);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Try the app</div>
+      <div style="font-family:var(--fh);font-size:14px;font-weight:600">NeuroSketch_v5.html</div>
+    </div>
+    <div style="background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.15);border-radius:10px;padding:14px 24px;text-align:center">
+      <div style="font-family:var(--fh);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">GitHub</div>
+      <div style="font-family:var(--fh);font-size:14px;font-weight:600">github.com/[yourname]/neurogaze</div>
+    </div>
+    <div style="background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.15);border-radius:10px;padding:14px 24px;text-align:center">
+      <div style="font-family:var(--fh);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">Contact</div>
+      <div style="font-family:var(--fh);font-size:14px;font-weight:600">hello@neurogaze.org</div>
+    </div>
+  </div>
+</div>
+
+</div><!-- end deck -->
+
+<!-- NAV BAR -->
+<div id="nav-bar">
+  <button class="nav-btn" id="btn-prev">&#8592;</button>
+  <div id="dots"></div>
+  <span id="slide-counter">1 / 12</span>
+  <button class="nav-btn" id="btn-next">&#8594;</button>
+</div>
+
+<script>
+const TOTAL = 12;
+let cur = 1;
+
+const slides = () => document.querySelectorAll('.slide');
+const dotsEl = document.getElementById('dots');
+const counter = document.getElementById('slide-counter');
+
+// Build dots
+for(let i=1;i<=TOTAL;i++){
+  const d=document.createElement('div');
+  d.className='nav-dot'+(i===1?' active':'');
+  d.onclick=()=>goTo(i);
+  dotsEl.appendChild(d);
+}
+
+function goTo(n){
+  if(n<1||n>TOTAL)return;
+  slides().forEach(s=>s.classList.remove('active'));
+  document.querySelector(`.slide[data-slide="${n}"]`).classList.add('active');
+  dotsEl.querySelectorAll('.nav-dot').forEach((d,i)=>d.classList.toggle('active',i===n-1));
+  counter.textContent=n+' / '+TOTAL;
+  cur=n;
+}
+
+document.getElementById('btn-prev').onclick=()=>goTo(cur-1);
+document.getElementById('btn-next').onclick=()=>goTo(cur+1);
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown')goTo(cur+1);
+  if(e.key==='ArrowLeft'||e.key==='Backspace'||e.key==='PageUp')goTo(cur-1);
+  if(e.key==='Home')goTo(1);
+  if(e.key==='End')goTo(TOTAL);
+  e.preventDefault();
+});
+
+// Touch swipe
+let tx=0;
+document.addEventListener('touchstart',e=>tx=e.touches[0].clientX,{passive:true});
+document.addEventListener('touchend',e=>{
+  const dx=e.changedTouches[0].clientX-tx;
+  if(Math.abs(dx)>50){dx<0?goTo(cur+1):goTo(cur-1);}
+},{passive:true});
+
+goTo(1);
+</script>
+</body>
+</html>
